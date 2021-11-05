@@ -10,6 +10,12 @@ The raison d'etre of the program is simply to perform equivalent processing to t
 | splitp      | 5.7s        |
 | splitp (pipe to `/dev/null`)      | 3.7s        |
 
+### Notes
+
+The input oligo-dT to random-mer mapping must be provided in a two-column **tab-separated** file.
+Further, the first row of the file must be a comment starting with the `#` character.
+
+
 ### Limitations / differences
 
 * Currently, random hexamers can only be searched at a Hamming distance of 0 or 1.
