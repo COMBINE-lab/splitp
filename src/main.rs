@@ -2,7 +2,7 @@ use clap::Parser;
 use needletail::bitkmer::BitNuclKmer;
 use needletail::parse_fastx_file;
 use serde::Deserialize;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::io::Write;
 use std::str;
 
@@ -92,7 +92,7 @@ fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::Ran
     let s = ahash::RandomState::with_seeds(2u64, 7u64, 1u64, 8u64);
     let mut hm = HashMap::with_hasher(s);
     let s2 = ahash::RandomState::with_seeds(2u64, 7u64, 1u64, 8u64);
-    let mut hs = HashSet::with_hasher(s2);
+    let mut hs = HashMap::with_hasher(s2);
     let mut collisions = 0usize;
     let mut neighbor_vec = Vec::new();
 
@@ -108,17 +108,24 @@ fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::Ran
         )
         .next()
         {
-            let inserted = hs.insert(rh.0);
-            if !inserted {
+            let count = hs.entry(rh.0).or_insert(0usize);
+            if *count > 0{
                 collisions += 1;
             }
+            *count += 1;
+       
             neighbor_vec.push((rh.0, record.oligo_dt.clone()));
+            // if we are considering one-edit neighbors, then generate
+            // of the neighbors of the random-mer, and prepare them 
+            // for insertion into the map with the corresponding 
+            // oligo-dT.
             if one_edit {
                 for n in get_all_snps(rh.0, record.rand_hex.len()) {
-                    let inserted = hs.insert(n);
-                    if !inserted {
+                    let count = hs.entry(n).or_insert(0usize);
+                    if *count > 0 {
                         collisions += 1;
                     }
+                    *count += 1;
                     neighbor_vec.push((n, record.oligo_dt.clone()));
                 }
             }
@@ -133,7 +140,13 @@ fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::Ran
         );
     }
     for (k, v) in neighbor_vec {
-        hm.insert(k, v);
+        if let Some(count) = hs.get(&k) {     
+            if *count == 1 {
+                hm.insert(k, v);
+            } else {
+                eprintln!("{} different random mers were within 1-hamming of {}", count, k);
+            }
+        }
     }
     hm
 }
