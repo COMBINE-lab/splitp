@@ -8,7 +8,7 @@ The raison d'etre of the program is simply to perform equivalent processing to t
 | ----------- | ----------- |
 | Perl script | 2m 48.6s    |
 | splitp      | 5.7s        |
-| splitp (pipe to `/dev/null`      | 3.7s        |
+| splitp (pipe to `/dev/null`)      | 3.7s        |
 
 ### Limitations / differences
 
