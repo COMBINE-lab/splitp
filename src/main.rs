@@ -23,9 +23,9 @@ struct Opts {
     /// start position of the random barcode
     #[clap(short, long)]
     start: usize,
-    /// stop position of the random barcode
+    /// end position of the random barcode
     #[clap(short, long)]
-    stop: usize,
+    end: usize,
     /// consider 1-hamming distance neighbors of random hexamers
     #[clap(short, long)]
     one_hamming: bool,
@@ -140,7 +140,7 @@ fn main() {
     let bcm = parse_bc_map(&opts.bc_map, opts.one_hamming);
 
     // the barcode length
-    let bclen = ((opts.stop - opts.start) + 1) as u8;
+    let bclen = ((opts.end - opts.start) + 1) as u8;
 
     // lock stdout and buffer so we can write to it quickly.
     let stdout = std::io::stdout();
@@ -159,7 +159,7 @@ fn main() {
         // threep = after the barcode
         let fivep = &seq[..opts.start - 1];
         let bcs = &seq[opts.start - 1..opts.start - 1 + (bclen as usize)];
-        let threep = &seq[opts.stop..];
+        let threep = &seq[opts.end..];
 
         // the fallthrough numeric encoding of
         // the barcode
