@@ -72,6 +72,15 @@ fn get_all_snps(bc: u64, bc_length: usize) -> Vec<u64> {
     snps
 }
 
+
+/// Parse a 2-column tab-separated file (given by `bc_map`) that contains the 
+/// mapping of oligo-dT sequences to random-mer sequences.  The file 
+/// *must* be tab-separated, and *must* begin with a header line starting 
+/// with `#`.
+///
+/// If the `one_edit` argument is `true` then all one-edit neighbors of an random-mer will 
+/// be mapped to the corresponding oligo-dT.  Otherwise, only exactly matching random-mers 
+/// will be matched to the corresponding oligo-dT.
 fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::RandomState> {
     let mut rdr = csv::ReaderBuilder::new()
         .delimiter(b'\t')
