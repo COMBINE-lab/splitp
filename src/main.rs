@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use std::io::Write;
 use std::str;
 mod utils;
+use crate::utils::get_all_snps;
 
 // first, reproduce the appproach from
 // https://github.com/jeremymsimon/SPLITseq/blob/main/Preprocess_SPLITseq_collapse_bcSharing.pl
@@ -38,14 +39,13 @@ struct BCMapRecord {
     rand_hex: String,
 }
 
-
-/// Parse a 2-column tab-separated file (given by `bc_map`) that contains the 
-/// mapping of oligo-dT sequences to random-mer sequences.  The file 
-/// *must* be tab-separated, and *must* begin with a header line starting 
+/// Parse a 2-column tab-separated file (given by `bc_map`) that contains the
+/// mapping of oligo-dT sequences to random-mer sequences.  The file
+/// *must* be tab-separated, and *must* begin with a header line starting
 /// with `#`.
 ///
-/// If the `one_edit` argument is `true` then all one-edit neighbors of an random-mer will 
-/// be mapped to the corresponding oligo-dT.  Otherwise, only exactly matching random-mers 
+/// If the `one_edit` argument is `true` then all one-edit neighbors of an random-mer will
+/// be mapped to the corresponding oligo-dT.  Otherwise, only exactly matching random-mers
 /// will be matched to the corresponding oligo-dT.
 fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::RandomState> {
     let mut rdr = csv::ReaderBuilder::new()
@@ -75,18 +75,18 @@ fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::Ran
         .next()
         {
             let count = hs.entry(rh.0).or_insert(0usize);
-            if *count > 0{
+            if *count > 0 {
                 collisions += 1;
             }
             *count += 1;
-       
+
             neighbor_vec.push((rh.0, record.oligo_dt.clone()));
             // if we are considering one-edit neighbors, then generate
-            // of the neighbors of the random-mer, and prepare them 
-            // for insertion into the map with the corresponding 
+            // of the neighbors of the random-mer, and prepare them
+            // for insertion into the map with the corresponding
             // oligo-dT.
             if one_edit {
-                for n in utils::get_all_snps(rh.0, record.rand_hex.len()) {
+                for n in get_all_snps(rh.0, record.rand_hex.len()) {
                     let count = hs.entry(n).or_insert(0usize);
                     if *count > 0 {
                         collisions += 1;
@@ -106,11 +106,14 @@ fn parse_bc_map(bc_map: &str, one_edit: bool) -> HashMap<u64, String, ahash::Ran
         );
     }
     for (k, v) in neighbor_vec {
-        if let Some(count) = hs.get(&k) {     
+        if let Some(count) = hs.get(&k) {
             if *count == 1 {
                 hm.insert(k, v);
             } else {
-                eprintln!("{} different random mers were within 1-hamming of {}", count, k);
+                eprintln!(
+                    "{} different random mers were within 1-hamming of {}",
+                    count, k
+                );
             }
         }
     }
