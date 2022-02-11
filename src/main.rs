@@ -14,7 +14,7 @@ use crate::utils::get_all_snps;
 /// This doc string acts as a help message when the user runs '--help'
 /// as do all doc strings on fields
 #[derive(Parser)]
-#[clap(version = "1.0", author = "Rob P. <rob@cs.umd.edu>")]
+#[clap(version = "0.1.0", author = "Rob P. <rob@cs.umd.edu>")]
 struct Opts {
     /// the input R2 file
     #[clap(short, long)]
