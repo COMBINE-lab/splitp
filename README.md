@@ -10,6 +10,36 @@ The raison d'etre of the program is simply to perform equivalent processing to t
 | splitp      | 5.7s        |
 | splitp (pipe to `/dev/null`)      | 3.7s        |
 
+### Usage 
+
+The `splitp` program takes several arguments.  The usage can be printed 
+from the command line using `splitp -h`.
+
+```
+USAGE:
+    splitp [OPTIONS] --read-file <READ_FILE> --bc-map <BC_MAP> --start <START> --end <END>
+
+OPTIONS:
+    -b, --bc-map <BC_MAP>          the map of oligo-dT to random hexamers
+    -e, --end <END>                end position of the random barcode
+    -h, --help                     Print help information
+    -o, --one-hamming              consider 1-hamming distance neighbors of random hexamers
+    -r, --read-file <READ_FILE>    the input R2 file
+    -s, --start <START>            start position of the random barcode
+    -V, --version                  Print version information
+
+```
+
+**Please take note** that `splitp` writes the output (processed reads) to stdout, so that the 
+output can be directly piped to an input stream of another program (e.g. directly 
+to `alevin-fry` via [process substitution](https://tldp.org/LDP/abs/html/process-sub.html)).  This 
+also means, if you want to store the processed reads on disk, you can pipe the results directly 
+to gzip to compress them e.g.:
+
+```
+splitp -r reads.fq -b oligo_hex_bc_mapping.txt -s 87 -e 94 -o | gzip > reads.fq.gz
+```
+
 ### Notes
 
 The input oligo-dT to random-mer mapping must be provided in a two-column **tab-separated** file.
