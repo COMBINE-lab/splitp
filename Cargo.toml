@@ -2,7 +2,7 @@
 name = "splitp"
 version = "0.1.0"
 edition = "2018"
-license = "LICENSE"
+license-file = "LICENSE"
 description = "Streaming SPLiT-seq read pre-processing"
 homepage = "https://github.com/COMBINE-lab/splitp"
 repository = "https://github.com/COMBINE-lab/splitp"
