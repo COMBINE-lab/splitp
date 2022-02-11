@@ -11,8 +11,7 @@ use crate::utils::get_all_snps;
 // first, reproduce the appproach from
 // https://github.com/jeremymsimon/SPLITseq/blob/main/Preprocess_SPLITseq_collapse_bcSharing.pl
 
-/// This doc string acts as a help message when the user runs '--help'
-/// as do all doc strings on fields
+/// Streaming read pre-preprocessor.
 #[derive(Parser)]
 #[clap(version = "0.1.0", author = "Rob P. <rob@cs.umd.edu>")]
 struct Opts {
@@ -21,6 +20,7 @@ struct Opts {
     read_file: String,
     /// the map of oligo-dT to random hexamers
     #[clap(short, long)]
+
     bc_map: String,
     /// start position of the random barcode
     #[clap(short, long)]
@@ -42,6 +42,7 @@ struct BCMapRecord {
 /// Parse a 2-column tab-separated file (given by `bc_map`) that contains the
 /// mapping of oligo-dT sequences to random-mer sequences.  The file
 /// *must* be tab-separated, and *must* begin with a header line starting
+
 /// with `#`.
 ///
 /// If the `one_edit` argument is `true` then all one-edit neighbors of an random-mer will
