@@ -10,6 +10,37 @@ The raison d'etre of the program is simply to perform equivalent processing to t
 | splitp      | 5.7s        |
 | splitp (pipe to `/dev/null`)      | 3.7s        |
 
+### Installation
+
+First, install the rust toolchain according to the instructions [here](https://www.rust-lang.org/tools/install) or by executing:
+
+```{bash}
+$ https://www.rust-lang.org/tools/install
+```
+
+Then clone this repository and build `splitp`
+
+```{bash}
+$ git clone https://github.com/COMBINE-lab/splitp.git
+$ cd splitp
+$ cargo build --release
+```
+
+Then you can execute `splitp` as:
+
+```{bash}
+$ ./target/release/splitp
+```
+
+Alternatively, install it into your cargo home directory with:
+
+```{bash}
+$ cargo install
+```
+
+and ensure that your cargo binary directory is in your `PATH`.  Then, you can simply invoke `splitp`.
+
+
 ### Usage 
 
 The `splitp` program takes several arguments.  The usage can be printed 
