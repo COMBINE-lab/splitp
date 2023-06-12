@@ -13,23 +13,23 @@ use crate::utils::get_all_snps;
 
 /// This doc string acts as a help message when the user runs '--help'
 /// as do all doc strings on fields
-#[derive(Parser)]
-#[clap(version = "0.1.0", author = "Rob P. <rob@cs.umd.edu>")]
+#[derive(Parser, Debug)]
+#[command(author, version, about)]
 struct Opts {
     /// the input R2 file
-    #[clap(short, long)]
+    #[arg(short, long)]
     read_file: String,
     /// the map of oligo-dT to random hexamers
-    #[clap(short, long)]
     bc_map: String,
+    #[arg(short, long)]
     /// start position of the random barcode
-    #[clap(short, long)]
+    #[arg(short, long)]
     start: usize,
     /// end position of the random barcode
-    #[clap(short, long)]
+    #[arg(short, long)]
     end: usize,
     /// consider 1-hamming distance neighbors of random hexamers
-    #[clap(short, long)]
+    #[arg(short, long)]
     one_hamming: bool,
 }
 
